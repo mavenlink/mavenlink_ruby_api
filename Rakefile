@@ -12,17 +12,21 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "mavenlink_ruby_api"
+  gem.name = "mavenlink"
   gem.homepage = "http://github.com/mavenlink/mavenlink_ruby_api"
   gem.license = "MIT"
   gem.summary = %Q{Ruby client for Mavenlink's API}
   gem.description = %Q{This is a Ruby API client for Mavenlink.  Mavenlink's project collaboration suite allows you to manage your business relationships, share files, and track project activity online from anywhere in the world. Within a project workspace in Mavenlink, you can agree on budget & schedule, track time, send invoices, get paid via PayPal, and complete work.}
   gem.email = "support@mavenlink.com"
-  gem.authors = ["Roger Neel"]
-  # Include your dependencies below. Runtime dependencies are required when using your gem,
-  # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-  #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
-  #  gem.add_development_dependency 'rspec', '> 1.2.3'
+  gem.authors = ["Roger Neel", "Andrew Cantino"]
+
+  gem.add_runtime_dependency "httparty", "0.7.4"
+
+  gem.add_development_dependency "webmock", "~> 1.6.2"
+  gem.add_development_dependency "rspec", "~> 2.3.0"
+  gem.add_development_dependency "jeweler", "~> 1.5.2"
+  gem.add_development_dependency "rr", "~> 1.0.2"
+  gem.add_development_dependency "json", "~> 1.5.1"
 end
 Jeweler::RubygemsDotOrgTasks.new
 
@@ -44,7 +48,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "mavenlink_ruby_api #{version}"
+  rdoc.title = "mavenlink #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
