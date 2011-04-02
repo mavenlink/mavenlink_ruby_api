@@ -36,7 +36,7 @@ We have full {REST API and Ruby client documentation on the wiki}[https://github
   > post.update(:message => "")
   false
   > post.errors
-  "A message is required"
+  ["A message is required"]
   > post.destroy
   true
 
