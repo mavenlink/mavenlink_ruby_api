@@ -11,8 +11,6 @@ module Mavenlink
     def initialize(json, options = {})
       self.path_params = options[:path_params] || {}
       self.basic_auth = options[:basic_auth]
-      self.errors = []
-
       set_json json
     end
 
@@ -64,10 +62,10 @@ module Mavenlink
         set_json response.parsed_response
         true
       elsif response.code == 422
-        self.errors = response.parsed_response['error']
+        self.errors = response.parsed_response['errors']
         false
       else
-        raise "Confusing error with code #{response.code}"
+        raise "Server error code #{response.code}"
       end
     end
 
@@ -76,10 +74,10 @@ module Mavenlink
       if response.code == 200
         true
       elsif response.code == 422
-        self.errors = response.parsed_response['error']
+        self.errors = response.parsed_response['errors']
         false
       else
-        raise "Confusing error with code #{response.code}"
+        raise "Server error code #{response.code}"
       end
     end
 
@@ -88,7 +86,7 @@ module Mavenlink
       if result.code == 200
         set_json result.parsed_response
       else
-        raise "Confusing error with code #{result.code}"
+        raise "Server error code #{result.code}"
       end
       self
     end
@@ -96,6 +94,7 @@ module Mavenlink
     protected
 
     def set_json(j)
+      self.errors = []
       self.json = j
       wrap_contained_objects
     end
@@ -122,10 +121,10 @@ module Mavenlink
         klass.new(response.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, response.parsed_response))
       elsif response.code == 422
         k = klass.new(response.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, response.parsed_response))
-        k.errors = response.parsed_response['error']
+        k.errors = response.parsed_response['errors']
         k
       else
-        raise "Confusing error with code #{response.code}"
+        raise "Server error code #{response.code}"
       end
     end
 
@@ -138,7 +137,7 @@ module Mavenlink
           klass.new(result.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, result.parsed_response))
         end
       else
-        raise "Confusing error with code #{result.code}"
+        raise "Server error code #{result.code}"
       end
     end
     

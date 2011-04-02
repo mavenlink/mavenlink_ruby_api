@@ -144,7 +144,7 @@ describe Mavenlink::Base do
           it "doesn't update the local model but adds errors when unsuccessful" do
             stub_request(:put, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
               with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%248.50").
-              to_return(:status => 422, :body => { :error => ["error 1", "error 2"] }.to_json, :headers => {})
+              to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
             prong = @prongs.first
             prong.update(:price => "$8.50")
@@ -166,7 +166,7 @@ describe Mavenlink::Base do
           it "returns false and sets errors on failure" do
             stub_request(:delete, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100?").
               with(:headers => {'Accept'=>'application/json'}).
-              to_return(:status => 422, :body => { :error => ["error 1", "error 2"] }.to_json, :headers => {})
+              to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
             prong = @prongs.first
             prong.destroy.should be_false
@@ -211,7 +211,7 @@ describe Mavenlink::Base do
         it "should return the new prong object with errors when unsuccessful" do
           stub_request(:post, "http://user:password@www.example.com/api/v0/widgets/1/prongs").
             with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%24100").
-            to_return(:status => 422, :body => { :error => ["error 1", "error 2"] }.to_json, :headers => {})
+            to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
           prong = @widget.create_prong(:price => "$100")
           prong.should be_a(Prong)
