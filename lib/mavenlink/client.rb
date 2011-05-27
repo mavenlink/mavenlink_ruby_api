@@ -41,6 +41,15 @@ module Mavenlink
     end
 
 
+    def expenses(options = {})
+      fetch('expenses', Expense, options, lambda { |expense| {:workspace_id => expense['workspace_id']} })
+    end
+
+    def expense(expense_id)
+      fetch("expenses/#{expense_id}", Expense, {}, lambda { |expense| {:workspace_id => expense['workspace_id']} })
+    end
+
+
     def events(options = {})
       fetch('events', Event, options)
     end
@@ -73,6 +82,19 @@ module Mavenlink
 
     def create_time_entry(options)
       build("time_entries", TimeEntry, options, :workspace_id => id)
+    end
+
+
+    def expenses(options = {})
+      fetch("expenses", Expense, options, :workspace_id => id)
+    end
+
+    def expense(expense_id, options = {})
+      fetch("expenses/#{expense_id}", Expense, options, :workspace_id => id)
+    end
+
+    def create_expense(options)
+      build("expenses", Expense, options, :workspace_id => id)
     end
 
 
@@ -123,6 +145,15 @@ module Mavenlink
     def story(options = {})
       fetch("../../stories/#{json['story_id']}", Story, options, :workspace_id => workspace_id) if json['story_id']
     end
+
+    def workspace(options = {})
+      fetch("../..", Workspace, options)
+    end
+  end
+
+  class Expense < Base
+    request_path "/workspaces/:workspace_id/expenses/:id"
+    class_name :expense
 
     def workspace(options = {})
       fetch("../..", Workspace, options)

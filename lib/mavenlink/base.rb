@@ -81,7 +81,7 @@ module Mavenlink
       end
     end
 
-    def reload!(options = {})
+    def reload(options = {})
       result = get_request(request_path, options)
       if result.code == 200
         set_json result.parsed_response

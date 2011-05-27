@@ -106,7 +106,7 @@ describe Mavenlink::Base do
           with(:headers => {'Accept'=>'application/json'}).
           to_return(:status => 200, :body => { :kind => "sprocket_updated", :id => 1, :owners => [{ :name => "Bob_updated" }, { :name => "Sam" }] }.to_json, :headers => {})
 
-        @widget.reload!(:some => :option)
+        @widget.reload(:some => :option)
         @widget.kind.should == "sprocket_updated"
         @widget.owners.first.name.should == "Bob_updated"
       end

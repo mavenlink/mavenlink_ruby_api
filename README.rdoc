@@ -19,6 +19,8 @@ We have full {REST API and Ruby client documentation on the wiki}[https://github
   "This is my workspace!"
   > workspaces.first.time_entries.length
   20
+  > workspaces.first.expenses.length
+  4
   > workspaces.first.stories.length
   4
   > posts = workspaces.first.posts
