@@ -1,0 +1,18 @@
+## CLIENT TODO
+- Document expenses on the wiki (/expenses and /workspaces/2/expenses).
+- Document reload available on all models.
+- Document error responses, such as:
+    => expense
+    => #<Mavenlink::Expense:0x101aeb760 @json={"category"=>"Some Category", "created_at"=>"2011...
+    expense.destroy
+    => false
+    expense.errors
+    => ["Expense 23456 cannot be deleted because it is in an active invoice"]
+    expense.update :foo => :bar
+    => false
+    expense.errors
+    => ["Unknown params: expense[foo]. Known params: expense[date] is the expense date in the form MM/DD/YYYY, expense[amount_in_cents] is the amount of this expense in the base units of the workspace currency (i.e., cents for USD), expense[notes] are the notes, if any, associated with this expense, expense[category] is the expense category"]
+
+## API TODO
+- Add user endpoint
+- Add invoices endpoint
