@@ -50,6 +50,15 @@ module Mavenlink
     end
 
 
+    def invoices(options = {})
+      fetch('invoices', Invoice, options, lambda { |invoice| {:workspace_id => invoice['workspace_id']} })
+    end
+
+    def invoice(invoice_id)
+      fetch("invoices/#{invoice_id}", Invoice, {}, lambda { |invoice| {:workspace_id => invoice['workspace_id']} })
+    end
+
+
     def events(options = {})
       fetch('events', Event, options)
     end
@@ -95,6 +104,15 @@ module Mavenlink
 
     def create_expense(options)
       build("expenses", Expense, options, :workspace_id => id)
+    end
+
+
+    def invoices(options = {})
+      fetch("invoices", Invoice, options, :workspace_id => id)
+    end
+
+    def invoice(invoice_id, options = {})
+      fetch("invoice/#{invoice_id}", Invoice, options, :workspace_id => id)
     end
 
 
@@ -154,6 +172,23 @@ module Mavenlink
   class Expense < Base
     request_path "/workspaces/:workspace_id/expenses/:id"
     class_name :expense
+
+    def workspace(options = {})
+      fetch("../..", Workspace, options)
+    end
+  end
+
+  class AdditionalItem < Base
+    request_path "/not_available_yet"
+    class_name :additional_item
+  end
+
+  class Invoice < Base
+    request_path "/workspaces/:workspace_id/invoices/:id"
+    class_name :invoice
+    contains :time_entries => lambda { |time_entry, json| { :class => TimeEntry, :path_params => { :id => json['id'], :workspace_id => json['workspace_id'] } } },
+             :expenses => lambda { |expense, json| { :class => Expense, :path_params => { :id => json['id'], :workspace_id => json['workspace_id'] } } },
+             :additional_items => AdditionalItem
 
     def workspace(options = {})
       fetch("../..", Workspace, options)
