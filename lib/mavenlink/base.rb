@@ -105,7 +105,6 @@ module Mavenlink
                               nil
                             elsif json[method.to_s].is_a?(Array)
                               json[method.to_s].map do |data|
-                                puts "calling get_contains_options on #{data.inspect}" if self.class.debug
                                 options = get_contains_options(method.to_sym, data)
                                 options[:class].new(data, :basic_auth => basic_auth, :path_params => options[:path_params] || {})
                               end
