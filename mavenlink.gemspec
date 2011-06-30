@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{mavenlink}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Roger Neel", "Andrew Cantino"]
-  s.date = %q{2011-06-29}
+  s.authors = ["Mavenlink Team"]
+  s.date = %q{2011-06-30}
   s.description = %q{This is a Ruby API client for Mavenlink.  Mavenlink's project collaboration suite allows you to manage your business relationships, share files, and track project activity online from anywhere in the world. Within a project workspace in Mavenlink, you can agree on budget & schedule, track time, send invoices, get paid via PayPal, and complete work.}
   s.email = %q{support@mavenlink.com}
   s.extra_rdoc_files = [
@@ -40,23 +40,13 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Ruby client for Mavenlink's API}
-  s.test_files = [
-    "spec/mavenlink/base_spec.rb",
-    "spec/mavenlink/client_spec.rb",
-    "spec/spec_helper.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<httparty>, ["= 0.7.4"])
-      s.add_runtime_dependency(%q<webmock>, ["~> 1.6.2"])
-      s.add_runtime_dependency(%q<rspec>, ["~> 2.3.0"])
-      s.add_runtime_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_runtime_dependency(%q<rr>, ["~> 1.0.2"])
-      s.add_runtime_dependency(%q<json>, ["~> 1.5.1"])
+      s.add_runtime_dependency(%q<mavenlink>, [">= 0"])
       s.add_runtime_dependency(%q<httparty>, ["= 0.7.4"])
       s.add_development_dependency(%q<webmock>, ["~> 1.6.2"])
       s.add_development_dependency(%q<rspec>, ["~> 2.3.0"])
@@ -64,12 +54,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rr>, ["~> 1.0.2"])
       s.add_development_dependency(%q<json>, ["~> 1.5.1"])
     else
-      s.add_dependency(%q<httparty>, ["= 0.7.4"])
-      s.add_dependency(%q<webmock>, ["~> 1.6.2"])
-      s.add_dependency(%q<rspec>, ["~> 2.3.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_dependency(%q<rr>, ["~> 1.0.2"])
-      s.add_dependency(%q<json>, ["~> 1.5.1"])
+      s.add_dependency(%q<mavenlink>, [">= 0"])
       s.add_dependency(%q<httparty>, ["= 0.7.4"])
       s.add_dependency(%q<webmock>, ["~> 1.6.2"])
       s.add_dependency(%q<rspec>, ["~> 2.3.0"])
@@ -78,12 +63,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<json>, ["~> 1.5.1"])
     end
   else
-    s.add_dependency(%q<httparty>, ["= 0.7.4"])
-    s.add_dependency(%q<webmock>, ["~> 1.6.2"])
-    s.add_dependency(%q<rspec>, ["~> 2.3.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-    s.add_dependency(%q<rr>, ["~> 1.0.2"])
-    s.add_dependency(%q<json>, ["~> 1.5.1"])
+    s.add_dependency(%q<mavenlink>, [">= 0"])
     s.add_dependency(%q<httparty>, ["= 0.7.4"])
     s.add_dependency(%q<webmock>, ["~> 1.6.2"])
     s.add_dependency(%q<rspec>, ["~> 2.3.0"])
