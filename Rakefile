@@ -18,13 +18,13 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Ruby client for Mavenlink's API}
   gem.description = %Q{This is a Ruby API client for Mavenlink.  Mavenlink's project collaboration suite allows you to manage your business relationships, share files, and track project activity online from anywhere in the world. Within a project workspace in Mavenlink, you can agree on budget & schedule, track time, send invoices, get paid via PayPal, and complete work.}
   gem.email = "support@mavenlink.com"
-  gem.authors = ["Roger Neel", "Andrew Cantino"]
+  gem.authors = ["Mavenlink Team"]
 
   gem.add_runtime_dependency "httparty", "0.7.4"
 
   gem.add_development_dependency "webmock", "~> 1.6.2"
   gem.add_development_dependency "rspec", "~> 2.3.0"
-  gem.add_development_dependency "jeweler", "~> 1.5.2"
+  gem.add_development_dependency "jeweler", "~> 1.6.2"
   gem.add_development_dependency "rr", "~> 1.0.2"
   gem.add_development_dependency "json", "~> 1.5.1"
 end
