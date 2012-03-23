@@ -197,7 +197,9 @@ module Mavenlink
 
   class Story < Base
     request_path "/workspaces/:workspace_id/stories/:id"
-    contains :creator => User, :assignee => User
+    contains :creator => User,
+             :assignee => User,
+             :assignees => User
     class_name :story
 
     def workspace(options = {})
