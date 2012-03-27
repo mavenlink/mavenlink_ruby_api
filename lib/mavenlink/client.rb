@@ -31,6 +31,10 @@ module Mavenlink
       fetch("workspaces/#{workspace_id}", Workspace, {})
     end
 
+    def create_workspace(options)
+      build("workspaces", Workspace, options, {})
+    end
+
 
     def time_entries(options = {})
       fetch('time_entries', TimeEntry, options, lambda { |time_entry| {:workspace_id => time_entry['workspace_id']} })
@@ -78,6 +82,11 @@ module Mavenlink
 
     def create_post(options)
       build("posts", Post, options, :workspace_id => id)
+    end
+
+
+    def create_invitation(options)
+      build("invite", WorkspaceInvitation, options, :workspace_id => id)
     end
 
 
@@ -132,6 +141,11 @@ module Mavenlink
     def participants(options = {})
       fetch("participants", Participant, options, :workspace_id => id)
     end
+  end
+
+  class WorkspaceInvitation < Base
+    request_path "/not_available_yet"
+    class_name :invitation
   end
 
   class Participant < Base
