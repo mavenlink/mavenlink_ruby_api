@@ -137,7 +137,7 @@ module Mavenlink
           klass.new(result.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, result.parsed_response))
         end
       else
-        raise "Server error code #{result.code}"
+        raise "Server error code #{result.code}: #{result.parsed_response.inspect}"
       end
     end
     
