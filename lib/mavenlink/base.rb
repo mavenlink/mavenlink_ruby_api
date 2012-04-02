@@ -90,6 +90,11 @@ module Mavenlink
       end
       self
     end
+
+    # For Rails's as_json
+    def as_json(*args)
+      @json.as_json(*args)
+    end
     
     protected
 

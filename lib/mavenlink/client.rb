@@ -1,7 +1,7 @@
 module Mavenlink
   class Base
-    base_uri ENV['TESTING'] ? 'https://mavenlink.local/api/v0' : 'https://www.mavenlink.com/api/v0'
-    debug ENV['DEBUG'] || false
+    base_uri ENV['MAVENLINK_DEVELOPMENT'] ? 'https://mavenlink.local/api/v0' : 'https://www.mavenlink.com/api/v0'
+    debug ENV['MAVENLINK_DEBUG'] || false
   end
 
   # Wrapping objects that have no API endpoints yet

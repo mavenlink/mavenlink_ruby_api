@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'json'
 require 'webmock/rspec'
 
-ENV['TESTING'] = 'true'
+ENV['MAVENLINK_DEVELOPMENT'] = 'true'
 
 $: << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'mavenlink'
