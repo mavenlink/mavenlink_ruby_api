@@ -66,6 +66,15 @@ module Mavenlink
     def events(options = {})
       fetch('events', Event, options)
     end
+
+
+    def all_visible_stories(options = {})
+      fetch('stories/all_visible', Story, options, lambda { |story| {:workspace_id => story['workspace_id']} })
+    end
+
+    def stories(options = {})
+      fetch('stories', Story, options, lambda { |story| {:workspace_id => story['workspace_id']} })
+    end
   end
 
   class Workspace < Base
