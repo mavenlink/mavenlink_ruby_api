@@ -75,6 +75,10 @@ module Mavenlink
     def stories(options = {})
       fetch('stories', Story, options, lambda { |story| {:workspace_id => story['workspace_id']} })
     end
+
+    def story(story_id)
+      fetch("stories/#{story_id}", Story, {}, lambda { |story| {:workspace_id => story['workspace_id']} })
+    end
   end
 
   class Workspace < Base

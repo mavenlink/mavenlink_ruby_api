@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mavenlink (0.2.5)
+    mavenlink (0.2.7)
       httparty
 
 GEM
