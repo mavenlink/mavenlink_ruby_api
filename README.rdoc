@@ -66,4 +66,4 @@ We strive to keep the Ruby API up-to-date with our REST API.  However, if you fi
 
 == Copyright
 
-Copyright (c) 2011 Mavenlink, LLC. See LICENSE.txt for further details.
+Copyright (c) 2012 Mavenlink, Inc. See LICENSE.txt for further details.
