@@ -1,12 +1,16 @@
 = Mavenlink Ruby API Client
 
-The Mavenlink API provides programmatic access to many of Mavenlink's capabilities, including projects, posts, tasks, and time entries.  This is a full-featured Ruby client to the Mavenlink REST API.
-
 {Mavenlink's}[http://mavenlink.com] project collaboration suite allows you to manage your business relationships, share files, and track project activity online from anywhere in the world. Within a project workspace in Mavenlink, you can agree on budget & schedule, track time, send invoices, get paid via PayPal, and complete work.
+
+The Mavenlink API provides programmatic access to many of Mavenlink's capabilities, including projects, posts, tasks, and time entries.  This is a full-featured Ruby client to the Mavenlink REST API.
 
 == The REST API
 
 We have full {REST API and Ruby client documentation on the wiki}[https://github.com/mavenlink/mavenlink_ruby_api/wiki].
+
+== API Clients
+
+The REST API and Ruby client are documented on this site.  We also have an early-release {PHP client}[https://github.com/mavenlink/mavenlink_php_api].
 
 == Example Usage
 
