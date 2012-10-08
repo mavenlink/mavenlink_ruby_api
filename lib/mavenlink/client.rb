@@ -19,24 +19,35 @@ module Mavenlink
   # Normal API objects
 
   class Client < Base
-    def initialize(user_id, token, options = {})
+    def initialize(options = {})
       options[:debug] = !!ENV['MAVENLINK_DEBUG'] unless options.has_key?(:debug)
+      options[:api_version] = (options[:api_version] || 0).to_i
 
       config = Config.new
       if ENV['MAVENLINK_DEVELOPMENT'] || options[:development]
         config.domain = 'https://mavenlink.local'
         config.skip_ssl_verification = true
       else
-        config.domain = 'https://www.mavenlink.com'
+        config.domain = options[:domain] || 'https://www.mavenlink.com'
       end
       config.debug = options[:debug]
-      config.root_path = "/api/v#{options[:api_version] || 0}"
-      config.user_id = user_id
-      config.api_token = token
 
+      config.basic_auth_username = options[:basic_auth_username]
+      config.basic_auth_password = options[:basic_auth_password]
       config.faraday_adaptor = options[:faraday_adaptor]
       config.timeout = options[:timeout]
       config.open_timeout = options[:open_timeout]
+
+      case options[:api_version]
+        when 0
+          config.basic_auth_username = options[:user_id]
+          config.basic_auth_password = options[:api_token]
+        when 1
+          config.access_token = options[:access_token]
+        else
+          raise "Unknown Mavenlink API version #{options[:api_version]}"
+      end
+      config.root_path = "/api/v#{options[:api_version]}"
 
       super({}, :config => config)
     end

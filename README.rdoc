@@ -17,7 +17,7 @@ The REST API and Ruby client are documented on this site.  We also have an early
   (sudo) gem install mavenlink
   > require 'rubygems'
   > require 'mavenlink'
-  > client = Mavenlink::Client.new(<user_id>, '<api_token>')
+  > client = Mavenlink::Client.new(:user_id => <user_id>, :api_token => '<api_token>')
   > workspaces = client.workspaces(:per_page => 10)
   > workspaces.first.title
   "This is my workspace!"
@@ -60,7 +60,7 @@ For security, the API is provided over SSL only.  Additionally, you should consi
 
 The Mavenlink Ruby client uses Faraday as an abstract networking library.  By default we use Net::HTTP, but you can select a different adaptor with the `:faraday_adaptor` option.  You may also set the `:timeout` and `:open_timeout` when creating the Client.
 
-  > client = Mavenlink::Client.new(<user_id>, '<api_token>', :faraday_adaptor => :em_http, :timeout => 25)
+  > client = Mavenlink::Client.new(:user_id => <user_id>, :api_token => '<api_token>', :faraday_adaptor => :em_http, :timeout => 25)
 
 == Contributing to the Mavenlink Ruby API Client
 

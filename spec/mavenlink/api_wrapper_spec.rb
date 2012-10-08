@@ -30,10 +30,10 @@ describe Mavenlink::ApiWrapper do
 
   describe "example usage with some widgets with many prongs" do
     class TestClient < Mavenlink::ApiWrapper
-      def initialize(user_id, api_token)
+      def initialize(options = {})
         config = Mavenlink::Config.new
-        config.user_id = user_id
-        config.api_token = api_token
+        config.basic_auth_username = options[:username]
+        config.basic_auth_password = options[:password]
         config.domain = "http://www.example.com"
         config.root_path = "/api/v0"
         super({}, :config => config)
@@ -77,13 +77,13 @@ describe Mavenlink::ApiWrapper do
 
     describe "the test client" do
       it "should do basic auth" do
-        client = TestClient.new("user", "password")
+        client = TestClient.new(:username => "user", :password => "password")
         client.widgets(:limit => 5)
         WebMock.should have_requested(:get, "http://user:password@www.example.com/api/v0/widgets?limit=5")
       end
 
       it "should have many widgets" do
-        client = TestClient.new("user", "password")
+        client = TestClient.new(:username => "user", :password => "password")
         widgets = client.widgets(:limit => 5)
         widgets.length.should == 2
         widgets.first.kind.should == "sprocket"
@@ -96,7 +96,7 @@ describe Mavenlink::ApiWrapper do
 
     describe "widgets" do
       before do
-        @client = TestClient.new("user", "password")
+        @client = TestClient.new(:username => "user", :password => "password")
         @widget = @client.widgets(:limit => 5).first
         @widget.should be_a(Widget)
       end
