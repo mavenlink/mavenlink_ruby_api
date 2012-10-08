@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.licenses = ["MIT"]
 
-  s.add_runtime_dependency "oauth2"
   s.add_runtime_dependency "faraday"
   s.add_runtime_dependency "json"
   s.add_development_dependency "webmock"
