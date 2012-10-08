@@ -1,8 +1,10 @@
 PATH
   remote: .
   specs:
-    mavenlink (0.2.7)
-      httparty
+    mavenlink (0.3.0)
+      faraday
+      json
+      oauth2
 
 GEM
   remote: http://rubygems.org/
@@ -12,15 +14,11 @@ GEM
     diff-lcs (1.1.3)
     faraday (0.8.4)
       multipart-post (~> 1.1)
-    httparty (0.8.1)
-      multi_json
-      multi_xml
     httpauth (0.2.0)
     json (1.6.5)
     jwt (0.1.5)
       multi_json (>= 1.0)
     multi_json (1.2.0)
-    multi_xml (0.4.2)
     multipart-post (1.1.5)
     oauth2 (0.8.0)
       faraday (~> 0.8)
@@ -48,9 +46,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  json
   mavenlink!
-  oauth2
   rr
   rspec
   webmock

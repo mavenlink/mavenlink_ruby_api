@@ -56,6 +56,12 @@ Your User ID and API Token are both available on your Mavenlink account page at 
 
 For security, the API is provided over SSL only.  Additionally, you should consider your API Token to be much like a password.  Someone with your token can make changes to your Mavenlink account and perform actions in your name.  If you believe that your token has been compromised, login to Mavenlink and reset your token from your account page.
 
+== Other Client Options
+
+The Mavenlink Ruby client uses Faraday as an abstract networking library.  By default we use Net::HTTP, but you can select a different adaptor with the `:faraday_adaptor` option.  You may also set the `:timeout` and `:open_timeout` when creating the Client.
+
+  > client = Mavenlink::Client.new(<user_id>, '<api_token>', :faraday_adaptor => :em_http, :timeout => 25)
+
 == Contributing to the Mavenlink Ruby API Client
 
 We strive to keep the Ruby API up-to-date with our REST API.  However, if you find a feature missing, feel free to contribute it. 

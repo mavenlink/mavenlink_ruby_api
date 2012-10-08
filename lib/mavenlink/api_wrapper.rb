@@ -1,23 +1,20 @@
-require 'httparty'
+require_relative "config"
+require 'json'
 
 module Mavenlink
-  class Base
-    include HTTParty
-    headers 'Accept' => 'application/json'
-    format :json
-
-    attr_accessor :json, :path_params, :basic_auth, :errors
+  class ApiWrapper
+    attr_accessor :json, :path_params, :config, :errors
 
     def initialize(json, options = {})
       self.path_params = options[:path_params] || {}
-      self.basic_auth = options[:basic_auth]
+      self.config = options[:config]
       set_json json
     end
 
     def id
       json['id']
     end
-    
+
     def request_path
       p = self.class.request_path.to_s
       params = path_params.dup
@@ -35,58 +32,54 @@ module Mavenlink
       uri = URI.parse("http://www.example.com#{original}")
       (uri + append).path.gsub(/\/$/, '')
     end
-    
+
     def get_request(path, options = {})
-      puts "GET #{path}" if self.class.debug
-      self.class.get path, :query => options, :basic_auth => basic_auth
+      config.make_request :get, path, options
     end
 
     def put_request(path, options = {})
-      puts "PUT #{path}" if self.class.debug
-      self.class.put path, :body => options, :basic_auth => basic_auth
+      config.make_request :put, path, options
     end
 
     def post_request(path, options = {})
-      puts "POST #{path}" if self.class.debug
-      self.class.post path, :body => options, :basic_auth => basic_auth
+      config.make_request :post, path, options
     end
 
     def delete_request(path, options = {})
-      puts "DELETE #{path}" if self.class.debug
-      self.class.delete path, :query => options, :basic_auth => basic_auth
+      config.make_request :delete, path, options
     end
 
     def update(changes)
       response = put_request(request_path, self.class.class_name => changes)
-      if response.code == 200
-        set_json response.parsed_response
+      if response.status == 200
+        set_json JSON.parse(response.body)
         true
-      elsif response.code == 422
-        self.errors = response.parsed_response['errors']
+      elsif response.status == 422
+        self.errors = JSON.parse(response.body)['errors']
         false
       else
-        raise "Server error code #{response.code}"
+        raise "Server error status #{response.status}"
       end
     end
 
     def destroy
       response = delete_request(request_path)
-      if response.code == 200
+      if response.status == 200
         true
-      elsif response.code == 422
-        self.errors = response.parsed_response['errors']
+      elsif response.status == 422
+        self.errors = JSON.parse(response.body)['errors']
         false
       else
-        raise "Server error code #{response.code}"
+        raise "Server error status #{response.status}"
       end
     end
 
     def reload(options = {})
       result = get_request(request_path, options)
-      if result.code == 200
-        set_json result.parsed_response
+      if result.status == 200
+        set_json JSON.parse(result.body)
       else
-        raise "Server error code #{result.code}"
+        raise "Server error status #{result.status}"
       end
       self
     end
@@ -111,38 +104,41 @@ module Mavenlink
                             elsif json[method.to_s].is_a?(Array)
                               json[method.to_s].map do |data|
                                 options = get_contains_options(method.to_sym, data)
-                                options[:class].new(data, :basic_auth => basic_auth, :path_params => options[:path_params] || {})
+                                options[:class].new(data, :config => config, :path_params => options[:path_params] || {})
                               end
                             else
                               options = get_contains_options(method.to_sym, json[method.to_s])
-                              options[:class].new(json[method.to_s], :basic_auth => basic_auth, :path_params => options[:path_params] || {})
+                              options[:class].new(json[method.to_s], :config => config, :path_params => options[:path_params] || {})
                             end
       end
     end
 
     def build(path, klass, options, new_path_params = {})
       response = post_request(join_paths(request_path, path), klass.class_name => options)
-      if response.code == 200
-        klass.new(response.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, response.parsed_response))
-      elsif response.code == 422
-        k = klass.new(response.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, response.parsed_response))
-        k.errors = response.parsed_response['errors']
+      if response.status == 200
+        parsed_response = JSON.parse(response.body)
+        klass.new(parsed_response, :config => config, :path_params => handle_proc(new_path_params, parsed_response))
+      elsif response.status == 422
+        parsed_response = JSON.parse(response.body)
+        k = klass.new(parsed_response, :config => config, :path_params => handle_proc(new_path_params, parsed_response))
+        k.errors = parsed_response['errors']
         k
       else
-        raise "Server error code #{response.code}"
+        raise "Server error status #{response.status}"
       end
     end
 
     def fetch(path, klass, options, new_path_params = {})
       result = get_request(join_paths(request_path, path), options)
-      if result.code == 200
-        if result.parsed_response.is_a?(Array)
-          result.parsed_response.map { |data| klass.new(data, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, data)) }
+      if result.status == 200
+        parsed_response = JSON.parse(result.body)
+        if parsed_response.is_a?(Array)
+          parsed_response.map { |data| klass.new(data, :config => config, :path_params => handle_proc(new_path_params, data)) }
         else
-          klass.new(result.parsed_response, :basic_auth => basic_auth, :path_params => handle_proc(new_path_params, result.parsed_response))
+          klass.new(parsed_response, :config => config, :path_params => handle_proc(new_path_params, parsed_response))
         end
       else
-        raise "Server error code #{result.code}: #{result.parsed_response.inspect}"
+        raise "Server error status #{result.status}: #{result.body}"
       end
     end
     
@@ -166,24 +162,21 @@ module Mavenlink
       json.has_key?(method.to_s) ? json[method.to_s] : super
     end
 
-    def self.contains(c = nil)
-      @contains = c if c
-      @contains
-    end
+    class << self
+      def contains(c = nil)
+        @contains = c if c
+        @contains
+      end
 
-    def self.request_path(p = nil)
-      @request_path = p if p
-      @request_path
-    end
+      def request_path(p = nil)
+        @request_path = p if p
+        @request_path
+      end
 
-    def self.class_name(c = nil)
-      @class_name = c if c
-      @class_name
-    end
-
-    def self.debug(state = :not_set)
-      @@debug = state unless state == :not_set
-      @@debug
+      def class_name(c = nil)
+        @class_name = c if c
+        @class_name
+      end
     end
   end
 end

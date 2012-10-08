@@ -1,8 +1,8 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
-describe Mavenlink::Base do
+describe Mavenlink::ApiWrapper do
   describe "request_path and join_paths" do
-    class Example < Mavenlink::Base
+    class Example < Mavenlink::ApiWrapper
       request_path "/:something/blah/foo/:id"
     end
 
@@ -28,15 +28,15 @@ describe Mavenlink::Base do
     end
   end
 
-  describe "example usage with a test client and some widgets with many prongs" do
-    class TestBase < Mavenlink::Base
-      base_uri 'http://www.example.com/api/v0'
-      debug false
-    end
-
-    class TestClient < TestBase
-      def initialize(username, password)
-        super({}, :basic_auth => { :username => username, :password => password })
+  describe "example usage with some widgets with many prongs" do
+    class TestClient < Mavenlink::ApiWrapper
+      def initialize(user_id, api_token)
+        config = Mavenlink::Config.new
+        config.user_id = user_id
+        config.api_token = api_token
+        config.domain = "http://www.example.com"
+        config.root_path = "/api/v0"
+        super({}, :config => config)
       end
 
       def widgets(options = {})
@@ -44,14 +44,14 @@ describe Mavenlink::Base do
       end
     end
 
-    class User < TestBase; end
+    class User < Mavenlink::ApiWrapper; end
 
-    class Prong < TestBase
+    class Prong < Mavenlink::ApiWrapper
       request_path "/widgets/:widget_id/prongs/:id"
       class_name "prong"
     end
 
-    class Widget < TestBase
+    class Widget < Mavenlink::ApiWrapper
       request_path "/widgets/:id"
       contains :owners => User
       class_name "widget"
@@ -132,7 +132,7 @@ describe Mavenlink::Base do
         describe "#update" do
           it "updates the local model when successful" do
             stub_request(:put, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
-              with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%248.50").
+              with(:body => { "prong" => { "price" => "$8.50" } }).
               to_return(:status => 200, :body => { :price => "$8.50", :id => 100 }.to_json, :headers => {})
 
             prong = @prongs.first
@@ -143,7 +143,7 @@ describe Mavenlink::Base do
 
           it "doesn't update the local model but adds errors when unsuccessful" do
             stub_request(:put, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
-              with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%248.50").
+              with(:body => { "prong" => { "price" => "$8.50" } }).
               to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
             prong = @prongs.first
@@ -155,8 +155,7 @@ describe Mavenlink::Base do
 
         describe "#destroy" do
           it "returns true when successful" do
-            stub_request(:delete, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100?").
-              with(:headers => {'Accept'=>'application/json'}).
+            stub_request(:delete, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
               to_return(:status => 200, :body => '', :headers => {})
 
             prong = @prongs.first
@@ -164,8 +163,7 @@ describe Mavenlink::Base do
           end
 
           it "returns false and sets errors on failure" do
-            stub_request(:delete, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100?").
-              with(:headers => {'Accept'=>'application/json'}).
+            stub_request(:delete, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
               to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
             prong = @prongs.first
@@ -177,7 +175,7 @@ describe Mavenlink::Base do
 
       describe "#prong" do
         it "should return a single prong by id" do
-          stub_request(:get, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100?").
+          stub_request(:get, "http://user:password@www.example.com/api/v0/widgets/1/prongs/100").
             with(:headers => {'Accept'=>'application/json'}).
             to_return(:status => 200, :body => { :price => "$5", :id => 100 }.to_json, :headers => {})
           prong = @widget.prong(100)
@@ -189,7 +187,7 @@ describe Mavenlink::Base do
       describe "#create_prong" do
         it "should return the new prong object when successful" do
           stub_request(:post, "http://user:password@www.example.com/api/v0/widgets/1/prongs").
-            with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%24100").
+            with(:body => { "prong" => { "price" => "$100" } }).
             to_return(:status => 200, :body => { :price => "$100", :id => 102 }.to_json, :headers => {})
 
           prong = @widget.create_prong(:price => "$100")
@@ -200,7 +198,7 @@ describe Mavenlink::Base do
           prong.errors.should be_empty
 
           stub_request(:put, "http://user:password@www.example.com/api/v0/widgets/1/prongs/102").
-            with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%2490").
+            with(:body => { "prong" => { "price" => "$90" } }).
             to_return(:status => 200, :body => { :price => "$90", :id => 102 }.to_json, :headers => {})
           prong.update(:price => "$90")
           prong.price.should == "$90"
@@ -210,7 +208,7 @@ describe Mavenlink::Base do
 
         it "should return the new prong object with errors when unsuccessful" do
           stub_request(:post, "http://user:password@www.example.com/api/v0/widgets/1/prongs").
-            with(:headers => {'Accept'=>'application/json'}, :body => "prong[price]=%24100").
+            with(:body => { "prong" => { "price" => "$100" } }).
             to_return(:status => 422, :body => { :errors => ["error 1", "error 2"] }.to_json, :headers => {})
 
           prong = @widget.create_prong(:price => "$100")

@@ -69,7 +69,7 @@ describe Mavenlink::Client do
             with(:headers => {'Accept'=>'application/json'}).
             to_return(:status => 200, :body => @time_entries_json, :headers => {})
 
-        stub_request(:get, "https://user_id:token@mavenlink.local/api/v0/workspaces/1601/stories/1581?").
+        stub_request(:get, "https://user_id:token@mavenlink.local/api/v0/workspaces/1601/stories/1581").
             with(:headers => {'Accept'=>'application/json'}).
             to_return(:status => 200, :body => @story_json, :headers => {})
 
@@ -187,7 +187,7 @@ describe Mavenlink::Client do
       @events.last.subject.creator.full_name.should == "Some Other User"
 
       stub_request(:put, "https://user_id:token@mavenlink.local/api/v0/workspaces/5678/stories/7890").
-          with(:body    => "story[title]=Some%20new%20title",
+          with(:body    => { "story" => { "title" => "Some new title" } },
                :headers => {'Accept'=>'application/json'}).
           to_return(:status => 200, :body => @story_json.gsub(/Story Title/, 'Some new title'), :headers => {})
 

@@ -1,7 +1,7 @@
+require_relative "api_wrapper"
+
 module Mavenlink
-  class Base
-    base_uri ENV['MAVENLINK_DEVELOPMENT'] ? 'https://mavenlink.local/api/v0' : 'https://www.mavenlink.com/api/v0'
-    debug ENV['MAVENLINK_DEBUG'] || false
+  class Base < ApiWrapper
   end
 
   # Wrapping objects that have no API endpoints yet
@@ -19,8 +19,26 @@ module Mavenlink
   # Normal API objects
 
   class Client < Base
-    def initialize(user_id, token)
-      super({}, :basic_auth => {:username => user_id, :password => token})
+    def initialize(user_id, token, options = {})
+      options[:debug] = !!ENV['MAVENLINK_DEBUG'] unless options.has_key?(:debug)
+
+      config = Config.new
+      if ENV['MAVENLINK_DEVELOPMENT'] || options[:development]
+        config.domain = 'https://mavenlink.local'
+        config.skip_ssl_verification = true
+      else
+        config.domain = 'https://www.mavenlink.com'
+      end
+      config.debug = options[:debug]
+      config.root_path = "/api/v#{options[:api_version] || 0}"
+      config.user_id = user_id
+      config.api_token = token
+
+      config.faraday_adaptor = options[:faraday_adaptor]
+      config.timeout = options[:timeout]
+      config.open_timeout = options[:open_timeout]
+
+      super({}, :config => config)
     end
 
     def workspaces(options = {})

@@ -1,1 +1,2 @@
+0.2.8 - Switched from HTTParty to faraday.  Allow configuration of network library and timeout settings on client creation.
 0.2.4 - Add client.create_workspace and workspace.create_invitation methods.
