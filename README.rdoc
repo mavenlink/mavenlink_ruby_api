@@ -1,18 +1,20 @@
-= Mavenlink Ruby API Client
+= Please note, this documentation is for the Mavenlink V0 API and is now deprecated.  Please visit http://developer.mavenlink.com for our current documentation.
+
+== Mavenlink Ruby API Client
 
 {Mavenlink's}[http://mavenlink.com] project collaboration suite allows you to manage your business relationships, share files, and track project activity online from anywhere in the world. Within a project workspace in Mavenlink, you can agree on budget & schedule, track time, send invoices, get paid via PayPal, and complete work.
 
 The Mavenlink API provides programmatic access to many of Mavenlink's capabilities, including projects, posts, tasks, and time entries.  This is a full-featured Ruby client to the Mavenlink REST API.
 
-== The REST API
+=== The REST API
 
 We have full {REST API and Ruby client documentation on the wiki}[https://github.com/mavenlink/mavenlink_ruby_api/wiki].
 
-== API Clients
+=== API Clients
 
 The REST API and Ruby client are documented on this site.  We also have an early-release {PHP client}[https://github.com/mavenlink/mavenlink_php_api].
 
-== Example Usage
+=== Example Usage
 
   (sudo) gem install mavenlink
   > require 'rubygems'
@@ -46,17 +48,17 @@ The REST API and Ruby client are documented on this site.  We also have an early
   > post.destroy
   true
 
-== Credentials
+=== Credentials
 
-=== Finding your User ID and API Token
+==== Finding your User ID and API Token
 
 Your User ID and API Token are both available on your Mavenlink account page at the bottom of the first tab.
 
-=== Security
+==== Security
 
 For security, the API is provided over SSL only.  Additionally, you should consider your API Token to be much like a password.  Someone with your token can make changes to your Mavenlink account and perform actions in your name.  If you believe that your token has been compromised, login to Mavenlink and reset your token from your account page.
 
-== Contributing to the Mavenlink Ruby API Client
+=== Contributing to the Mavenlink Ruby API Client
 
 We strive to keep the Ruby API up-to-date with our REST API.  However, if you find a feature missing, feel free to contribute it. 
 
@@ -68,6 +70,6 @@ We strive to keep the Ruby API up-to-date with our REST API.  However, if you fi
 * Commit and push until you are happy with your contribution
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or it is otherwise necessary, that is fine, but please isolate it to its own commit so that we can cherry-pick around it as needed.
 
-== Copyright
+=== Copyright
 
-Copyright (c) 2012 Mavenlink, Inc. See LICENSE.txt for further details.
+Copyright (c) 2013 Mavenlink, Inc. See LICENSE.txt for further details.
