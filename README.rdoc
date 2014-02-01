@@ -1,1 +1,1 @@
-= Please note, this library is for the Mavenlink V0 API and is now deprecated.  Please visit http://developer.mavenlink.com for our current documentation and checkout https://github.com/mavenlink/mavenlink_ruby for a newer Ruby gem.
+= Please note, this library is for the Mavenlink V0 API and is now disabled.  Please visit http://developer.mavenlink.com for our current documentation.
